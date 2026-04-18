@@ -3,7 +3,17 @@
     "allow": [
       "WebFetch(domain:bounceituplivonia.com)",
       "Bash(npm install:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(gh repo:*)",
+      "Bash(where gh:*)",
+      "Bash(where git:*)",
+      "Read(//c/Program Files/**)",
+      "Read(//c/Users/hafez/AppData/Local/**)",
+      "Bash(cmd //c \"where gh\")",
+      "Bash(cmd //c \"winget install --id GitHub.cli -e --silent\")",
+      "Bash(cmd //c \"winget install --id GitHub.cli -e --silent --accept-source-agreements --accept-package-agreements\")",
+      "Bash(npm list:*)",
+      "Bash(npx vercel:*)"
     ]
   }
 }
