@@ -14,6 +14,7 @@ import {
 } from '@/components/Icons';
 import ParticleCanvas from '@/components/ParticleCanvas';
 import { useScrambleText } from '@/components/useScrambleText';
+import GlitterText from '@/components/GlitterText';
 import { useRef, useState, useEffect } from 'react';
 
 const features = [
@@ -174,7 +175,6 @@ export default function Home() {
   const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
   const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
-  const scrambleTitle = useScrambleText('BOUNCE IT UP', 400);
 
   return (
     <>
@@ -209,16 +209,13 @@ export default function Home() {
             <Star size={12} className="text-brand-yellow fill-brand-yellow" />
           </motion.div>
 
-          {/* Scramble Text Title */}
+          {/* Glitter Text Title */}
           <motion.h1
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9 }}
             className="font-display font-black leading-[0.9] mb-6"
             style={{ fontFamily: 'Poppins, sans-serif' }}
           >
             <span className="block text-5xl sm:text-7xl lg:text-9xl tracking-tight text-slate-800">
-              {scrambleTitle}
+              <GlitterText delay={0.3}>BOUNCE IT UP</GlitterText>
             </span>
             <span className="block gradient-text text-4xl sm:text-6xl lg:text-8xl mt-2">
               PARTY
