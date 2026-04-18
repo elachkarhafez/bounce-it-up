@@ -1,9 +1,11 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRef } from 'react';
 import { Star, Check, Zap } from 'lucide-react';
+import ParticleCanvas from '@/components/ParticleCanvas';
 
 const packages = [
   {
@@ -60,31 +62,66 @@ const packages = [
 ];
 
 export default function PartyPackagesPage() {
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+
   return (
     <div className="min-h-screen pt-32 sm:pt-40 pb-20">
-      <section className="relative py-12 sm:py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-orange/5 blur-[150px]" />
+      <section ref={heroRef} className="relative py-12 sm:py-20 overflow-hidden min-h-screen flex items-center">
+        {/* Parallax Background */}
+        <motion.div style={{ y: bgY }} className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900" />
+          <ParticleCanvas />
+          <div className="absolute inset-0 grid-overlay opacity-40" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-orange/5 blur-[150px]" />
+          <div className="absolute -bottom-40 -right-40 w-[600px] h-[600px] rounded-full bg-brand-purple/5 blur-[120px]" />
+        </motion.div>
 
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
+            style={{ y: bgY, opacity }}
             className="text-center mb-14"
           >
-            <div className="inline-block glass px-4 py-2 rounded-full mb-4 text-xs uppercase tracking-widest font-semibold">
-              <Star size={12} className="inline mr-2 fill-brand-orange text-brand-orange" />
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 glass px-4 py-2 rounded-full mb-8 text-sm font-semibold"
+            >
+              <Star size={12} className="fill-brand-orange text-brand-orange" />
               Birthday Parties
-            </div>
-            <h1 className="font-display font-black text-5xl sm:text-6xl lg:text-7xl text-white mb-4">
-              Party <span className="gradient-text">Packages</span>
-            </h1>
-            <p className="max-w-2xl mx-auto text-white/60 text-lg">
+            </motion.div>
+            <motion.h1
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9 }}
+              className="font-display font-black leading-[0.9] mb-6"
+            >
+              <span className="block text-5xl sm:text-7xl lg:text-8xl tracking-tight text-white/90">
+                Party Time
+              </span>
+              <span className="block gradient-text text-4xl sm:text-6xl lg:text-7xl mt-2">
+                Packages
+              </span>
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="max-w-2xl mx-auto text-lg sm:text-xl text-white/60 leading-relaxed"
+            >
               Make their birthday legendary.
-            </p>
+            </motion.p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="grid md:grid-cols-3 gap-6 lg:gap-8"
+          >
             {packages.map((pkg, i) => (
               <motion.div
                 key={pkg.name}
@@ -92,7 +129,8 @@ export default function PartyPackagesPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.15 }}
-                className={`glass rounded-3xl overflow-hidden flex flex-col h-full ${
+                whileHover={{ y: -10, transition: { duration: 0.3 } }}
+                className={`glass rounded-3xl overflow-hidden flex flex-col h-full transition-all ${
                   pkg.popular ? 'ring-2 ring-brand-orange shadow-glow-orange' : ''
                 }`}
               >
@@ -149,13 +187,13 @@ export default function PartyPackagesPage() {
                 </div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.4 }}
+            transition={{ delay: 0.8 }}
             className="text-center mt-12"
           >
             <p className="text-white/50 text-sm">
@@ -165,6 +203,27 @@ export default function PartyPackagesPage() {
               </a>
             </p>
           </motion.div>
+
+        {/* Floating Decorative Elements */}
+        <div className="absolute left-8 top-1/2 hidden xl:block">
+          <motion.div
+            animate={{ y: [0, -15, 0] }}
+            transition={{ duration: 4, repeat: Infinity }}
+            className="w-16 h-16 rounded-2xl glass flex items-center justify-center text-3xl"
+          >
+            🎉
+          </motion.div>
+        </div>
+        <div className="absolute right-12 bottom-1/3 hidden xl:block">
+          <motion.div
+            whileHover={{ scale: 1.2, rotate: 12 }}
+            animate={{ rotate: [0, 5, 0] }}
+            transition={{ duration: 3, repeat: Infinity }}
+            className="w-14 h-14 rounded-2xl glass flex items-center justify-center text-2xl cursor-pointer"
+          >
+            🎂
+          </motion.div>
+        </div>
         </div>
       </section>
     </div>

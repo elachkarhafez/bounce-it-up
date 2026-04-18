@@ -1,13 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
 import { MapPin, Phone, Mail, CheckCircle, Send } from 'lucide-react';
+import ParticleCanvas from '@/components/ParticleCanvas';
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,26 +25,56 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen pt-32 sm:pt-40 pb-20">
-      <section className="relative py-12 sm:py-20 overflow-hidden">
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-brand-orange/5 blur-[120px]" />
+      <section ref={heroRef} className="relative py-12 sm:py-20 overflow-hidden min-h-screen flex items-center">
+        {/* Parallax Background */}
+        <motion.div style={{ y: bgY }} className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900" />
+          <ParticleCanvas />
+          <div className="absolute inset-0 grid-overlay opacity-40" />
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-brand-orange/5 blur-[120px]" />
+          <div className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-brand-cyan/5 blur-[120px]" />
+        </motion.div>
 
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
+            style={{ y: bgY, opacity }}
             className="text-center mb-14"
           >
-            <h1 className="font-display font-black text-5xl sm:text-6xl lg:text-7xl text-white mb-4">
-              Come <span className="gradient-text">Visit Us</span>
-            </h1>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 glass px-4 py-2 rounded-full mb-8 text-sm font-semibold"
+            >
+              <span className="w-2 h-2 rounded-full bg-brand-orange animate-pulse" />
+              Contact
+            </motion.div>
+            <motion.h1
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9 }}
+              className="font-display font-black leading-[0.9] mb-6"
+            >
+              <span className="block text-5xl sm:text-7xl lg:text-8xl tracking-tight text-white/90">
+                Come Visit
+              </span>
+              <span className="block gradient-text text-4xl sm:text-6xl lg:text-7xl mt-2">
+                Us
+              </span>
+            </motion.h1>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="grid lg:grid-cols-2 gap-8 lg:gap-12"
+          >
             {/* Info */}
             <motion.div
               initial={{ opacity: 0, x: -40 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 }}
+              transition={{ delay: 0.7 }}
               className="space-y-6"
             >
               {/* Map */}
@@ -102,7 +138,7 @@ export default function ContactPage() {
             <motion.div
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 }}
+              transition={{ delay: 0.8 }}
             >
               <div className="glass rounded-3xl p-6 sm:p-8 h-full">
                 {sent ? (
@@ -178,7 +214,28 @@ export default function ContactPage() {
                 )}
               </div>
             </motion.div>
-          </div>
+          </motion.div>
+
+        {/* Floating Decorative Elements */}
+        <div className="absolute left-8 top-1/3 hidden xl:block">
+          <motion.div
+            animate={{ rotate: [0, 360] }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+            className="w-16 h-16 rounded-2xl glass flex items-center justify-center text-3xl"
+          >
+            📍
+          </motion.div>
+        </div>
+        <div className="absolute right-12 bottom-1/3 hidden xl:block">
+          <motion.div
+            whileHover={{ scale: 1.2 }}
+            animate={{ y: [0, -15, 0] }}
+            transition={{ duration: 4, repeat: Infinity }}
+            className="w-14 h-14 rounded-2xl glass flex items-center justify-center text-2xl cursor-pointer"
+          >
+            📧
+          </motion.div>
+        </div>
         </div>
       </section>
     </div>

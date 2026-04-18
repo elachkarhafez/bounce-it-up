@@ -1,7 +1,9 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
 import { Check, Crown, Zap } from 'lucide-react';
+import ParticleCanvas from '@/components/ParticleCanvas';
 
 const tiers = [
   {
@@ -51,32 +53,66 @@ const tiers = [
 ];
 
 export default function MembershipsPage() {
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+
   return (
     <div className="min-h-screen pt-32 sm:pt-40 pb-20">
-      <section className="relative py-12 sm:py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900" />
-        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-brand-purple/5 blur-[120px]" />
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-brand-yellow/5 blur-[100px]" />
+      <section ref={heroRef} className="relative py-12 sm:py-20 overflow-hidden min-h-screen flex items-center">
+        {/* Parallax Background */}
+        <motion.div style={{ y: bgY }} className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900" />
+          <ParticleCanvas />
+          <div className="absolute inset-0 grid-overlay opacity-40" />
+          <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-brand-purple/5 blur-[120px]" />
+          <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-brand-yellow/5 blur-[100px]" />
+        </motion.div>
 
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
+            style={{ y: bgY, opacity }}
             className="text-center mb-14"
           >
-            <div className="inline-block glass px-4 py-2 rounded-full mb-4 text-xs uppercase tracking-widest font-semibold">
-              <Crown size={12} className="inline mr-2" />
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 glass px-4 py-2 rounded-full mb-8 text-sm font-semibold"
+            >
+              <Crown size={12} />
               Memberships
-            </div>
-            <h1 className="font-display font-black text-5xl sm:text-6xl lg:text-7xl text-white mb-4">
-              Join the <span className="gradient-text-cyan">Fun Club</span>
-            </h1>
-            <p className="max-w-2xl mx-auto text-white/60 text-lg">
+            </motion.div>
+            <motion.h1
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9 }}
+              className="font-display font-black leading-[0.9] mb-6"
+            >
+              <span className="block text-5xl sm:text-7xl lg:text-8xl tracking-tight text-white/90">
+                Fun Club
+              </span>
+              <span className="block gradient-text-cyan text-4xl sm:text-6xl lg:text-7xl mt-2">
+                Memberships
+              </span>
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="max-w-2xl mx-auto text-lg sm:text-xl text-white/60 leading-relaxed"
+            >
               Unlimited play, exclusive discounts, and priority access.
-            </p>
+            </motion.p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="grid md:grid-cols-3 gap-6 lg:gap-8"
+          >
             {tiers.map((tier, i) => (
               <motion.div
                 key={tier.name}
@@ -84,7 +120,8 @@ export default function MembershipsPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.15 }}
-                className={`glass rounded-3xl overflow-hidden flex flex-col h-full border ${
+                whileHover={{ y: -10, transition: { duration: 0.3 } }}
+                className={`glass rounded-3xl overflow-hidden flex flex-col h-full border transition-all ${
                   tier.popular ? 'ring-2 ring-brand-yellow' : 'border-white/10'
                 }`}
               >
@@ -135,7 +172,28 @@ export default function MembershipsPage() {
                 </div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
+
+        {/* Floating Decorative Elements */}
+        <div className="absolute left-8 top-1/3 hidden xl:block">
+          <motion.div
+            animate={{ y: [0, -15, 0] }}
+            transition={{ duration: 4, repeat: Infinity }}
+            className="w-16 h-16 rounded-2xl glass flex items-center justify-center text-3xl"
+          >
+            ⭐
+          </motion.div>
+        </div>
+        <div className="absolute right-12 top-1/2 hidden xl:block">
+          <motion.div
+            whileHover={{ scale: 1.2 }}
+            animate={{ rotate: [0, 360] }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+            className="w-14 h-14 rounded-2xl glass flex items-center justify-center text-2xl cursor-pointer"
+          >
+            💎
+          </motion.div>
+        </div>
         </div>
       </section>
     </div>

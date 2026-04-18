@@ -1,9 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
+import { useRef } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import ParticleCanvas from '@/components/ParticleCanvas';
 
 const photos = [
   'https://images.unsplash.com/photo-1513161455079-7ef1a827d4af?w=800&q=80',
@@ -18,33 +20,77 @@ const photos = [
 
 export default function GalleryPage() {
   const [lightbox, setLightbox] = useState(null);
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   const prev = () => setLightbox((l) => (l === 0 ? photos.length - 1 : l - 1));
   const next = () => setLightbox((l) => (l === photos.length - 1 ? 0 : l + 1));
 
   return (
     <div className="min-h-screen pt-32 sm:pt-40 pb-20">
-      <section className="relative py-12 sm:py-20 overflow-hidden">
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section ref={heroRef} className="relative py-12 sm:py-20 overflow-hidden min-h-screen flex flex-col items-center justify-center">
+        {/* Parallax Background */}
+        <motion.div style={{ y: bgY }} className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900" />
+          <ParticleCanvas />
+          <div className="absolute inset-0 grid-overlay opacity-40" />
+          <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-brand-orange/10 blur-[120px]" />
+          <div className="absolute -bottom-40 -right-40 w-[600px] h-[600px] rounded-full bg-brand-cyan/10 blur-[120px]" />
+        </motion.div>
+
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
+            style={{ y: bgY, opacity }}
             className="text-center mb-14"
           >
-            <h1 className="font-display font-black text-5xl sm:text-6xl lg:text-7xl text-white mb-4">
-              See the <span className="gradient-text">Magic</span>
-            </h1>
-            <p className="text-white/60 text-lg">Real moments, real smiles</p>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 glass px-4 py-2 rounded-full mb-8 text-sm font-semibold"
+            >
+              <span className="w-2 h-2 rounded-full bg-brand-orange animate-pulse" />
+              Gallery
+            </motion.div>
+            <motion.h1
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9 }}
+              className="font-display font-black leading-[0.9] mb-6"
+            >
+              <span className="block text-5xl sm:text-7xl lg:text-8xl tracking-tight text-white/90">
+                See the
+              </span>
+              <span className="block gradient-text text-4xl sm:text-6xl lg:text-7xl mt-2">
+                Magic
+              </span>
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="text-lg sm:text-xl text-white/60"
+            >
+              Real moments, real smiles
+            </motion.p>
           </motion.div>
 
           {/* Masonry Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4 auto-rows-[180px]">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4 auto-rows-[180px]"
+          >
             {photos.map((photo, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
+                transition={{ delay: i * 0.05 }}
                 onClick={() => setLightbox(i)}
                 className="relative rounded-2xl overflow-hidden cursor-pointer group h-full"
               >
@@ -58,7 +104,18 @@ export default function GalleryPage() {
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all duration-300" />
               </motion.div>
             ))}
-          </div>
+          </motion.div>
+        </div>
+
+        {/* Floating Decorative Elements */}
+        <div className="absolute left-8 top-1/3 hidden xl:block">
+          <motion.div
+            animate={{ y: [0, -15, 0] }}
+            transition={{ duration: 4, repeat: Infinity }}
+            className="w-16 h-16 rounded-2xl glass flex items-center justify-center text-3xl"
+          >
+            📷
+          </motion.div>
         </div>
       </section>
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Star, ArrowRight, MapPin, Phone, Clock } from 'lucide-react';
@@ -12,7 +12,9 @@ import {
   ToddlerIcon,
   FoodIcon,
 } from '@/components/Icons';
-import { useRef } from 'react';
+import ParticleCanvas from '@/components/ParticleCanvas';
+import { useScrambleText } from '@/components/useScrambleText';
+import { useRef, useState, useEffect } from 'react';
 
 const features = [
   {
@@ -60,15 +62,51 @@ const features = [
 ];
 
 function FeatureCard({ feature, idx }) {
+  const cardRef = useRef(null);
+  const [rotX, setRotX] = useState(0);
+  const [rotY, setRotY] = useState(0);
+
+  const handleMouseMove = (e) => {
+    const card = cardRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    setRotX(((y - cy) / cy) * -8);
+    setRotY(((x - cx) / cx) * 8);
+  };
+
+  const handleMouseLeave = () => {
+    setRotX(0);
+    setRotY(0);
+  };
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
+      ref={cardRef}
+      initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ delay: idx * 0.1 }}
-      className="group"
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.6, delay: idx * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        transform: `perspective(600px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(10px)`,
+        transition: 'box-shadow 0.3s, transform 0.15s',
+      }}
+      className="group relative"
     >
-      <div className="glass rounded-3xl overflow-hidden h-full hover:scale-105 transition-transform duration-300">
+      {/* Glow on hover */}
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl blur-xl"
+        style={{
+          background: `radial-gradient(ellipse at 50% 0%, ${feature.color.replace('from-', '').replace(' to-', ', ')})`,
+        }}
+      />
+
+      <div className="glass rounded-3xl overflow-hidden h-full relative z-10 group-hover:ring-2 group-hover:ring-brand-orange/50 transition-all">
         {/* Image */}
         <div className="relative h-48 sm:h-56 overflow-hidden bg-dark-800">
           <Image
@@ -84,10 +122,15 @@ function FeatureCard({ feature, idx }) {
         {/* Content */}
         <div className="p-5 sm:p-6">
           {/* Icon */}
-          <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} text-white mb-3 text-2xl`}>
+          <motion.div
+            whileHover={{ scale: 1.1, rotate: 5 }}
+            className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} text-white mb-3 flex items-center justify-center`}
+          >
             <feature.icon />
-          </div>
-          <h3 className="font-display font-bold text-lg sm:text-xl text-white mb-2">{feature.title}</h3>
+          </motion.div>
+          <h3 className="font-display font-bold text-lg sm:text-xl text-white mb-2 group-hover:gradient-text transition-all">
+            {feature.title}
+          </h3>
           <p className="text-white/60 text-sm">{feature.desc}</p>
         </div>
       </div>
@@ -95,10 +138,43 @@ function FeatureCard({ feature, idx }) {
   );
 }
 
+function Counter({ target, suffix = '' }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-80px' });
+
+  useEffect(() => {
+    if (!inView) return;
+    const duration = 2000;
+    const steps = 60;
+    const increment = target / steps;
+    let current = 0;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(current));
+      }
+    }, duration / steps);
+    return () => clearInterval(timer);
+  }, [inView, target]);
+
+  return (
+    <span ref={ref} className="counter-num">
+      {count.toLocaleString()}{suffix}
+    </span>
+  );
+}
+
 export default function Home() {
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+
+  const scrambleTitle = useScrambleText('BOUNCE IT UP', 400);
 
   return (
     <>
@@ -107,80 +183,155 @@ export default function Home() {
         ref={heroRef}
         className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 sm:pt-0"
       >
+        {/* Parallax Background */}
         <motion.div style={{ y: bgY }} className="absolute inset-0">
           <div className="absolute inset-0 bg-hero-gradient" />
           <div className="absolute inset-0 grid-overlay opacity-40" />
+          <ParticleCanvas />
           <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-brand-orange/10 blur-[120px]" />
           <div className="absolute -bottom-40 -right-40 w-[600px] h-[600px] rounded-full bg-brand-cyan/10 blur-[120px]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-brand-purple/5 blur-[150px]" />
         </motion.div>
 
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        {/* Content */}
+        <motion.div
+          style={{ y: bgY, opacity }}
+          className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
+        >
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 glass px-4 py-2 rounded-full mb-6 text-sm font-semibold"
+            className="inline-flex items-center gap-2 glass px-4 py-2 rounded-full mb-8 text-sm font-semibold"
           >
             <span className="w-2 h-2 rounded-full bg-brand-green animate-pulse" />
             Livonia's #1 Indoor Fun Center
             <Star size={12} className="text-brand-yellow fill-brand-yellow" />
           </motion.div>
 
+          {/* Scramble Text Title */}
           <motion.h1
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="font-display font-black text-5xl sm:text-7xl lg:text-8xl leading-tight mb-6"
+            transition={{ duration: 0.9 }}
+            className="font-display font-black leading-[0.9] mb-6"
+            style={{ fontFamily: 'Poppins, sans-serif' }}
           >
-            <span className="text-white">Everything Kids</span>
-            <br />
-            <span className="gradient-text">Dream Of</span>
+            <span className="block text-5xl sm:text-7xl lg:text-9xl tracking-tight text-white/90">
+              {scrambleTitle}
+            </span>
+            <span className="block gradient-text text-4xl sm:text-6xl lg:text-8xl mt-2">
+              PARTY
+            </span>
           </motion.h1>
 
+          {/* Subtitle */}
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="max-w-2xl mx-auto text-lg sm:text-xl text-white/60 mb-10"
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="max-w-2xl mx-auto text-lg sm:text-xl text-white/60 leading-relaxed mb-10"
           >
-            The cleanest bounce houses and indoor fun center in Michigan. Parties, open play &
-            memberships for all ages.
+            Bounce houses, slides, obstacle courses, and endless fun for kids of all ages.
+            Birthday parties, open play & memberships — all in{' '}
+            <span className="text-brand-orange font-semibold">Livonia, Michigan.</span>
           </motion.p>
 
+          {/* CTA Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
           >
-            <Link href="/party-packages" className="btn-primary justify-center text-base py-4">
-              <span>Book a Party</span>
-              <ArrowRight size={18} />
-            </Link>
-            <Link href="/open-play" className="btn-outline justify-center text-base py-4">
-              <span>Open Play Info</span>
-            </Link>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
+              <Link href="/party-packages" className="btn-primary text-base py-4 px-8 glow-orange inline-flex">
+                <span>Book a Party Now</span>
+                <ArrowRight size={18} />
+              </Link>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
+              <Link href="/open-play" className="btn-outline text-base py-4 px-8 inline-flex">
+                <span>Open Play Info</span>
+              </Link>
+            </motion.div>
           </motion.div>
 
-          {/* Quick Stats */}
+          {/* Stats Row */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="grid grid-cols-3 gap-4 sm:gap-8 max-w-md mx-auto"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.7 }}
+            className="flex flex-wrap justify-center gap-8 sm:gap-16"
           >
             {[
-              { value: '15+', label: 'Years' },
-              { value: '50K+', label: 'Kids' },
-              { value: '5★', label: 'Rating' },
+              { value: 15, suffix: '+', label: 'Years of Fun' },
+              { value: 50000, suffix: '+', label: 'Happy Kids' },
+              { value: 5, suffix: '★', label: 'Google Rating' },
             ].map((stat) => (
-              <div key={stat.label}>
-                <div className="text-2xl sm:text-3xl font-black gradient-text">{stat.value}</div>
-                <div className="text-xs text-white/40 uppercase tracking-wide">{stat.label}</div>
+              <div key={stat.label} className="text-center">
+                <motion.div
+                  className="text-3xl sm:text-4xl font-black gradient-text font-display"
+                  whileInView={{ scale: [0.9, 1.1, 1] }}
+                  viewport={{ once: true }}
+                >
+                  <Counter target={stat.value} suffix={stat.suffix} />
+                </motion.div>
+                <div className="text-xs text-white/50 mt-1 uppercase tracking-widest">
+                  {stat.label}
+                </div>
               </div>
             ))}
           </motion.div>
+        </motion.div>
+
+        {/* Floating Decorative Elements */}
+        <div className="absolute left-8 top-1/3 hidden xl:block float-anim">
+          <motion.div
+            initial={{ rotate: 0 }}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+            className="w-16 h-16 rounded-2xl glass flex items-center justify-center text-3xl"
+          >
+            🎈
+          </motion.div>
         </div>
+        <div className="absolute right-12 top-1/4 hidden xl:block float-anim-2">
+          <motion.div
+            whileHover={{ scale: 1.2, rotate: 12 }}
+            className="w-14 h-14 rounded-2xl glass flex items-center justify-center text-2xl cursor-pointer"
+          >
+            ⭐
+          </motion.div>
+        </div>
+        <div className="absolute left-16 bottom-32 hidden xl:block float-anim-3">
+          <motion.div
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 3, repeat: Infinity }}
+            className="w-12 h-12 rounded-2xl glass flex items-center justify-center text-2xl"
+          >
+            🎉
+          </motion.div>
+        </div>
+        <div className="absolute right-8 bottom-40 hidden xl:block float-anim">
+          <motion.div
+            whileHover={{ scale: 1.15 }}
+            className="w-16 h-16 rounded-2xl glass flex items-center justify-center text-3xl cursor-pointer"
+          >
+            🎂
+          </motion.div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <motion.button
+          onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+          animate={{ y: [0, 10, 0] }}
+          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/30 hover:text-white/60 transition-colors"
+        >
+          <span className="text-xs uppercase tracking-widest">Scroll</span>
+          <ArrowRight size={20} className="rotate-90" />
+        </motion.button>
       </section>
 
       {/* Features Grid */}
