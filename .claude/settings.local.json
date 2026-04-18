@@ -13,7 +13,9 @@
       "Bash(cmd //c \"winget install --id GitHub.cli -e --silent\")",
       "Bash(cmd //c \"winget install --id GitHub.cli -e --silent --accept-source-agreements --accept-package-agreements\")",
       "Bash(npm list:*)",
-      "Bash(npx vercel:*)"
+      "Bash(npx vercel:*)",
+      "mcp__7a3ca81c-f4b1-4038-b1b7-1da8ab76ef98__deploy_to_vercel",
+      "Bash(vercel deploy:*)"
     ]
   }
 }

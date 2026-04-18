@@ -9,20 +9,23 @@ module.exports = {
     extend: {
       colors: {
         brand: {
-          orange: '#FF6B00',
-          amber: '#FF9500',
-          cyan: '#00D4FF',
-          yellow: '#FFD700',
-          purple: '#A855F7',
-          green: '#10E981',
+          orange: '#FF4D00',
+          amber: '#FFB800',
+          cyan: '#00D9FF',
+          yellow: '#FFE600',
+          purple: '#D946EF',
+          green: '#00F88A',
+          pink: '#FF1493',
+          blue: '#0099FF',
+          red: '#FF3333',
         },
         dark: {
-          950: '#030712',
-          900: '#050B1F',
-          800: '#0A1628',
-          700: '#102036',
-          600: '#1C3552',
-          500: '#254267',
+          950: '#F5F5F5',
+          900: '#FAFAFA',
+          800: '#FFFFFF',
+          700: '#F0F0F0',
+          600: '#E8E8E8',
+          500: '#E0E0E0',
         },
       },
       fontFamily: {
@@ -32,9 +35,9 @@ module.exports = {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        'hero-gradient': 'linear-gradient(135deg, #050B1F 0%, #0A1628 40%, #102036 100%)',
-        'glow-orange': 'radial-gradient(ellipse at center, rgba(255,107,0,0.3) 0%, transparent 70%)',
-        'glow-cyan': 'radial-gradient(ellipse at center, rgba(0,212,255,0.2) 0%, transparent 70%)',
+        'hero-gradient': 'linear-gradient(135deg, #FFFFFF 0%, #F5F5FF 40%, #F0E6FF 100%)',
+        'glow-orange': 'radial-gradient(ellipse at center, rgba(255,77,0,0.2) 0%, transparent 70%)',
+        'glow-cyan': 'radial-gradient(ellipse at center, rgba(0,217,255,0.15) 0%, transparent 70%)',
       },
       animation: {
         'float': 'float 6s ease-in-out infinite',
