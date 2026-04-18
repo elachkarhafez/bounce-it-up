@@ -33,7 +33,7 @@ export default function Navigation() {
                 B
               </div>
               <div className="hidden sm:block">
-                <div className="font-black text-lg text-white">
+                <div className="font-black text-lg text-slate-800">
                   Bounce <span className="gradient-text">It Up</span>
                 </div>
               </div>
@@ -45,7 +45,7 @@ export default function Navigation() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-sm font-semibold text-white/70 hover:text-white transition-colors"
+                  className="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors"
                 >
                   {link.label}
                 </Link>
@@ -71,7 +71,7 @@ export default function Navigation() {
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="lg:hidden p-2 rounded-xl hover:bg-white/10 text-white/70 hover:text-white transition-colors"
+                className="lg:hidden p-2 rounded-xl hover:bg-slate-200 text-slate-600 hover:text-slate-900 transition-colors"
               >
                 {mobileOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
@@ -95,7 +95,7 @@ export default function Navigation() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="block px-4 py-2.5 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors font-semibold"
+                  className="block px-4 py-2.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-200 transition-colors font-semibold"
                 >
                   {link.label}
                 </Link>

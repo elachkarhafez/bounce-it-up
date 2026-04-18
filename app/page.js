@@ -217,7 +217,7 @@ export default function Home() {
             className="font-display font-black leading-[0.9] mb-6"
             style={{ fontFamily: 'Poppins, sans-serif' }}
           >
-            <span className="block text-5xl sm:text-7xl lg:text-9xl tracking-tight text-white/90">
+            <span className="block text-5xl sm:text-7xl lg:text-9xl tracking-tight text-slate-800">
               {scrambleTitle}
             </span>
             <span className="block gradient-text text-4xl sm:text-6xl lg:text-8xl mt-2">
@@ -230,7 +230,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="max-w-2xl mx-auto text-lg sm:text-xl text-white/60 leading-relaxed mb-10"
+            className="max-w-2xl mx-auto text-lg sm:text-xl text-slate-600 leading-relaxed mb-10"
           >
             Bounce houses, slides, obstacle courses, and endless fun for kids of all ages.
             Birthday parties, open play & memberships — all in{' '}

@@ -30,15 +30,15 @@ export default function Footer() {
                 B
               </div>
               <div>
-                <div className="font-black text-white font-display">
+                <div className="font-black text-slate-800 font-display">
                   Bounce <span className="gradient-text">It Up</span>
                 </div>
-                <div className="text-[10px] text-white/30 uppercase tracking-widest">
+                <div className="text-[10px] text-slate-500 uppercase tracking-widest">
                   Livonia, MI
                 </div>
               </div>
             </Link>
-            <p className="text-white/40 text-sm leading-relaxed mb-4">
+            <p className="text-slate-600 text-sm leading-relaxed mb-4">
               The cleanest bounce houses and indoor fun center in Michigan.
             </p>
             {/* Social */}
@@ -68,7 +68,7 @@ export default function Footer() {
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
           >
-            <h4 className="text-xs text-white/40 uppercase tracking-widest font-semibold mb-5">
+            <h4 className="text-xs text-slate-600 uppercase tracking-widest font-semibold mb-5">
               Explore
             </h4>
             <ul className="space-y-3">
@@ -76,7 +76,7 @@ export default function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-white/50 hover:text-white transition-colors"
+                    className="text-sm text-slate-600 hover:text-slate-900 transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -92,14 +92,14 @@ export default function Footer() {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            <h4 className="text-xs text-white/40 uppercase tracking-widest font-semibold mb-5">
+            <h4 className="text-xs text-slate-600 uppercase tracking-widest font-semibold mb-5">
               Contact
             </h4>
             <ul className="space-y-4">
               <li>
                 <a href="tel:7345222000" className="flex items-center gap-3 group text-sm">
                   <Phone size={14} className="text-brand-orange group-hover:text-brand-amber transition-colors" />
-                  <span className="text-white/50 group-hover:text-white transition-colors">
+                  <span className="text-slate-600 group-hover:text-slate-900 transition-colors">
                     (734) 522-2000
                   </span>
                 </a>
@@ -110,7 +110,7 @@ export default function Footer() {
                   className="flex items-start gap-3 group text-sm"
                 >
                   <Mail size={14} className="text-brand-cyan group-hover:text-blue-400 transition-colors mt-0.5 shrink-0" />
-                  <span className="text-white/50 group-hover:text-white transition-colors break-all">
+                  <span className="text-slate-600 group-hover:text-slate-900 transition-colors break-all">
                     office@bounceituplivonia.com
                   </span>
                 </a>
@@ -123,7 +123,7 @@ export default function Footer() {
                   className="flex items-start gap-3 group text-sm"
                 >
                   <MapPin size={14} className="text-brand-purple group-hover:text-pink-400 transition-colors mt-0.5 shrink-0" />
-                  <span className="text-white/50 group-hover:text-white transition-colors">
+                  <span className="text-slate-600 group-hover:text-slate-900 transition-colors">
                     30276 Plymouth Rd<br />Livonia, MI 48150
                   </span>
                 </a>
@@ -133,7 +133,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/25">
+        <div className="border-t border-slate-200 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <span>© {new Date().getFullYear()} Bounce It Up Party. All rights reserved.</span>
           <span className="flex items-center gap-1">
             Made with <Heart size={12} className="text-brand-orange fill-brand-orange" /> in Livonia, MI

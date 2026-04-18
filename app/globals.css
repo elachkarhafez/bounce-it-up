@@ -22,10 +22,51 @@ html {
 
 body {
   background: linear-gradient(135deg, #FFFFFF 0%, #F5F5FF 40%, #F0E6FF 100%);
-  color: #222222;
+  color: #1a1a2e;
   font-family: var(--font-body);
   overflow-x: hidden;
   background-attachment: fixed;
+}
+
+/* Ensure all text is readable on light background */
+h1, h2, h3, h4, h5, h6 {
+  color: #0f0f1e;
+}
+
+p, span, div, li {
+  color: #333333;
+}
+
+.text-white\/50 {
+  color: #666666;
+}
+
+.text-white\/60 {
+  color: #555555;
+}
+
+.text-white\/40 {
+  color: #888888;
+}
+
+.text-white\/30 {
+  color: #999999;
+}
+
+.text-white\/25 {
+  color: #aaaaaa;
+}
+
+.text-white\/70 {
+  color: #444444;
+}
+
+.text-white\/80 {
+  color: #333333;
+}
+
+.text-white\/90 {
+  color: #1a1a1a;
 }
 
 ::-webkit-scrollbar {
@@ -48,17 +89,23 @@ body {
 }
 
 .glass {
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 2px solid rgba(255, 77, 0, 0.2);
+  color: #1a1a2e;
 }
 
 .glass-strong {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 2px solid rgba(255, 77, 0, 0.3);
+  color: #1a1a2e;
+}
+
+.glass * {
+  color: #1a1a2e;
 }
 
 .gradient-text {

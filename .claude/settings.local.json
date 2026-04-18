@@ -15,7 +15,10 @@
       "Bash(npm list:*)",
       "Bash(npx vercel:*)",
       "mcp__7a3ca81c-f4b1-4038-b1b7-1da8ab76ef98__deploy_to_vercel",
-      "Bash(vercel deploy:*)"
+      "Bash(vercel deploy:*)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "mcp__Claude_in_Chrome__navigate",
+      "mcp__Claude_in_Chrome__computer"
     ]
   }
 }
