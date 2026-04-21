@@ -10,9 +10,11 @@ const navLinks = [
   { label: 'Open Play', href: '/open-play' },
   { label: 'Party Packages', href: '/party-packages' },
   { label: 'Memberships', href: '/memberships' },
+  { label: 'Waiver', href: '/waiver' },
   { label: 'Gallery', href: '/gallery' },
   { label: 'FAQ', href: '/faq' },
   { label: 'Contact', href: '/contact' },
+  { label: 'Careers', href: '/careers' },
 ];
 
 export default function Navigation() {

@@ -18,7 +18,10 @@
       "Bash(vercel deploy:*)",
       "mcp__Claude_in_Chrome__tabs_context_mcp",
       "mcp__Claude_in_Chrome__navigate",
-      "mcp__Claude_in_Chrome__computer"
+      "mcp__Claude_in_Chrome__computer",
+      "Bash(curl -sI \"https://bounceituplivonia.com/wp-content/uploads/Bounce-it-Up-Extended_1.mp4\")",
+      "Bash(curl -L \"https://bounceituplivonia.com/wp-content/uploads/Bounce-it-Up-Extended_1.mp4\" -o \"C:\\\\Users\\\\hafez\\\\OneDrive\\\\Desktop\\\\BOUNCE IT UP FINAL\\\\public\\\\videos\\\\hero.mp4\" --progress-bar)",
+      "Bash(curl -L \"https://bounceituplivonia.com/wp-content/uploads/Bounce-it-up-Waiver3.pdf\" -o \"C:\\\\Users\\\\hafez\\\\OneDrive\\\\Desktop\\\\BOUNCE IT UP FINAL\\\\public\\\\docs\\\\waiver.pdf\" -s)"
     ]
   }
 }

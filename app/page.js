@@ -183,14 +183,26 @@ export default function Home() {
         ref={heroRef}
         className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 sm:pt-0"
       >
-        {/* Parallax Background */}
+        {/* Video Background */}
         <motion.div style={{ y: bgY }} className="absolute inset-0">
-          <div className="absolute inset-0 bg-hero-gradient" />
-          <div className="absolute inset-0 grid-overlay opacity-40" />
-          <ParticleCanvas />
-          <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-brand-orange/10 blur-[120px]" />
-          <div className="absolute -bottom-40 -right-40 w-[600px] h-[600px] rounded-full bg-brand-cyan/10 blur-[120px]" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-brand-purple/5 blur-[150px]" />
+          {/* Actual video */}
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ zIndex: 0 }}
+          >
+            <source src="/videos/hero.mp4" type="video/mp4" />
+          </video>
+          {/* Dark + color overlay so text stays readable */}
+          <div className="absolute inset-0 bg-black/50" style={{ zIndex: 1 }} />
+          <div className="absolute inset-0" style={{ zIndex: 1, background: 'linear-gradient(135deg, rgba(255,77,0,0.15) 0%, rgba(0,0,0,0) 50%, rgba(217,70,239,0.1) 100%)' }} />
+          {/* Particle canvas on top of video */}
+          <div className="absolute inset-0" style={{ zIndex: 2 }}>
+            <ParticleCanvas />
+          </div>
         </motion.div>
 
         {/* Content */}
@@ -214,10 +226,10 @@ export default function Home() {
             className="font-display font-black leading-[0.9] mb-6"
             style={{ fontFamily: 'Poppins, sans-serif' }}
           >
-            <span className="block text-5xl sm:text-7xl lg:text-9xl tracking-tight text-slate-800">
+            <span className="block text-5xl sm:text-7xl lg:text-9xl tracking-tight text-white drop-shadow-lg">
               <GlitterText delay={0.3}>BOUNCE IT UP</GlitterText>
             </span>
-            <span className="block gradient-text text-4xl sm:text-6xl lg:text-8xl mt-2">
+            <span className="block gradient-text text-4xl sm:text-6xl lg:text-8xl mt-2 drop-shadow-md">
               PARTY
             </span>
           </motion.h1>
@@ -227,7 +239,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="max-w-2xl mx-auto text-lg sm:text-xl text-slate-600 leading-relaxed mb-10"
+            className="max-w-2xl mx-auto text-lg sm:text-xl text-white/85 leading-relaxed mb-10 drop-shadow"
           >
             Bounce houses, slides, obstacle courses, and endless fun for kids of all ages.
             Birthday parties, open play & memberships — all in{' '}
@@ -274,7 +286,7 @@ export default function Home() {
                 >
                   <Counter target={stat.value} suffix={stat.suffix} />
                 </motion.div>
-                <div className="text-xs text-white/50 mt-1 uppercase tracking-widest">
+                <div className="text-xs mt-1 uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.6)' }}>
                   {stat.label}
                 </div>
               </div>
